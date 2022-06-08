@@ -27,7 +27,6 @@ int main()
     const int CANT_JUGADORES=2;
     string nombreJug1, nombreJug2;
     string jugadores[CANT_JUGADORES];
-    cout << dado1 << " "<<dado2;
 
     /* INICIO DEL MENU PRINCIPAL */
 
@@ -45,6 +44,7 @@ int main()
             cin >> nombreJug1;
             cout << "Ingrese el nombre del jugador 2:" << endl;
             cin >> nombreJug2;
+            cout << "HOla mundo"
             //cargarJugadores(jugadores, CANT_JUGADORES);
         break;
         case 2:
