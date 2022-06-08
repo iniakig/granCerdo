@@ -1,0 +1,6 @@
+#ifndef FUNCIONES_CERDO_H_INCLUDED
+#define FUNCIONES_CERDO_H_INCLUDED
+
+int generarDado();
+
+#endif // FUNCIONES_CERDO_H_INCLUDED
