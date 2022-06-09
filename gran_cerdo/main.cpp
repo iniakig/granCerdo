@@ -6,7 +6,6 @@
 using namespace std;
 
 #include "funciones_cerdo.h"
-//void cargarJugadores(string vec[], int cant); // DECLARACION DE FUNCION PARA INGRESAR EL NOMBRE DE LOS JUGADORES -- se le pasa por parametro el vector de jugadores y la cantidad
 
 int main()
 {
@@ -21,11 +20,10 @@ int main()
     cout << "0 - SALIR" << endl;
     cout << "--------------------" << endl;
 
-    /*DECLARACION DE VARIABLES GLOBALES*/
+    /*DECLARACION DE VARIABLES */
     srand (time(NULL));
     int opcMenuPrin;
     const int CANT_JUGADORES=2;
-    string nombreJug1, nombreJug2;
     string jugadores[CANT_JUGADORES];
 
     /* INICIO DEL MENU PRINCIPAL */
@@ -40,12 +38,9 @@ int main()
     }
     switch(opcMenuPrin){
         case 1:
-            cout << "Ingrese el nombre del jugador 1:" << endl;
-            cin >> nombreJug1;
-            cout << "Ingrese el nombre del jugador 2:" << endl;
-            cin >> nombreJug2;
-            cout << "HOla mundo"
-            //cargarJugadores(jugadores, CANT_JUGADORES);
+            cargarJugadores(jugadores, CANT_JUGADORES);
+            cout << jugadores[0] << "-----" << jugadores[1];
+
         break;
         case 2:
             cout << "Eligio 2";
@@ -58,14 +53,14 @@ int main()
         break;
 
     }
-
-    return 0;
+    /*int dados [3] = {};
+    int sumaDados;
+    int cantDados = 2;
+    for(int i=0; i<cantDados; i++){
+        dados[i] = generarDado();
+        sumaDados+=dados[i];
+        cout<<dados[i]<< endl;
+    }*/
 }
 
-/*void cargarJugadores(string vec[], int cant){
-    int i;
-    for(i=0; i<cant; i++){
-        cout << "Ingrese el nombre del jugador " << i+1<< endl;
-        cin >> vec[i];
-    }
-}*/
+
