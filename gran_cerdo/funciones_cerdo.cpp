@@ -4,14 +4,74 @@
 #include <string>
 #include <time.h> /* para funcion time*/
 #include <conio.h>
+#include <math.h>
 using namespace std;
 
 #include "funciones_cerdo.h"
 
+void cargarMenu () {
+    cout << "GRAN CERDO" << endl;
+    cout << "--------------------" << endl;
+    cout << "1 - JUGAR" << endl;
+    cout << "2 - ESTADÍSTICAS" << endl;
+    cout << "3 - CERDITOS" << endl;
+    cout << "--------------------" << endl;
+    cout << "0 - SALIR" << endl;
+    cout << "--------------------" << endl;
+
+        /*DECLARACION DE VARIABLES */
+    int opcMenuPrin;
+
+    cout << "Ingrese una opción: ";
+    cin >> opcMenuPrin;
+
+    while(!(opcMenuPrin==1||opcMenuPrin==2||opcMenuPrin==3||opcMenuPrin==0)){
+        cout << "El número ingresado es inválido por favor ingreselo nuevamente: ";
+        cin >> opcMenuPrin;
+
+    }
+    switch(opcMenuPrin){
+        case 1:
+            jugarJuego();
+
+
+        break;
+        case 2:
+            cout << "Eligio 2";
+        break;
+        case 3:
+            cout << "Eligio 3";
+        break;
+        case 0:
+            exit(0);
+        break;
+
+    }
+}
+
+void jugarJuego(){
+        const int CANT_JUGADORES=2;
+        const int CANT_RONDAS=5;
+        string jugadores[CANT_JUGADORES];
+        cargarJugadores(jugadores, CANT_JUGADORES);
+        cout << "Empieza jugando " << jugadores[0];
+        for(int i=0; i<CANT_RONDAS; i++){
+                cout<< "Ronda act "<< i+1<< endl;
+            for( int j=0; j<CANT_JUGADORES; j++){
+
+                mostrarJugAct(jugadores[j]);
+
+            }
+        }
+}
 int generarDado(){
     int num;
     num = rand() % 6+1;
     return num;
+}
+
+void mostrarJugAct(string jug[], int a){
+    cout << "Jugador act "<< jug[a] <<endl;
 }
 
 void cargarJugadores(string arr[], int cant){
@@ -33,21 +93,23 @@ void cargarJugadores(string arr[], int cant){
 
             while(bandEmpate == 0){
                 for(int i=0; i<cant; i++){
-                    int sumaTiro=0;
-                    for(int j=0; j<2; j++){
-                        cout << nombresJugadores[i] << " presione una tecla para tirar el dado "<< j+1 << endl;
-                        getch();
-                        matDados[i][j] = generarDado();
-                        cout<<matDados[i][j]<<endl;
-                        sumaTiro = sumaTiro + matDados[i][j];
-                        if(matDados[i][j]>maxDado){
-                            maxDado = matDados[i][j];
-                            jugMaxDadoPos = i;
-                        }
-                        if(sumaTiro>maxTiro){
-                            maxTiro = sumaTiro;
-                            jugMaxTiroPos = i;
-                        }
+                    cout << nombresJugadores[i] << " presione una tecla para tirar los dados " << endl;
+                    getch();
+                    matDados[i][0] = generarDado();
+                    cout<<matDados[i][0]<<endl;
+                    matDados[i][1] = generarDado();
+                    cout<<matDados[i][1]<<endl;
+                    int sumaTiro = matDados[i][0] + matDados[i][1];
+                    int maxDadoAct = calcularMax(matDados[i][0], matDados[i][1]);
+
+                    if(maxDadoAct>maxDado){
+                        maxDado = maxDadoAct;
+                        jugMaxDadoPos = i;
+                    }
+
+                    if(sumaTiro>maxTiro){
+                        maxTiro = sumaTiro;
+                        jugMaxTiroPos = i;
                     }
                     cout << "Su tiro suma "<< sumaTiro << endl;
                     cout << "-----------------------------"<< endl;
@@ -56,7 +118,7 @@ void cargarJugadores(string arr[], int cant){
                 for(int i=0; i<cant; i++){
                     int sumaDados=0;
                     for (int j=0; j<2; j++){
-                        sumaDados = sumaDados + matDados[i][j];
+                        sumaDados = matDados[i][0] + matDados[i][1];
                         if(matDados[i][j] == maxDado){
                             acuMaxDado++;
                         }
@@ -98,4 +160,10 @@ void cargarJugadores(string arr[], int cant){
             }
 }
 
-
+int calcularMax (int a, int b) {
+    if (a>b){
+        return a;
+    }else {
+        return b;
+    }
+}

@@ -3,4 +3,8 @@
 
 int generarDado(); // FUNCION QUE DEVUELVE UN NUMERO ENTRE 1 Y 6 -- O EL VALOR DE UN SOLO DADO
 void cargarJugadores(string arr[], int cant); // FUNCION PARA CARGAR LOS NOMBRES DE LOS JUGADORES Y DEFINIR QUIEN DEBE COMENZAR TIRANDO -- SE PASA EL VECTOR DONDE SE GUARDAN LOS NOMBRES DE LOS JUGADORES X PARAMETRO.
+void cargarMenu();
+void jugarJuego();
+int calcularMax(int a, int b);
+void mostrarJugAct(string jugador);
 #endif // FUNCIONES_CERDO_H_INCLUDED
