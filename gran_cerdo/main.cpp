@@ -39,7 +39,8 @@ int main()
     switch(opcMenuPrin){
         case 1:
             cargarJugadores(jugadores, CANT_JUGADORES);
-            cout << jugadores[0] << "-----" << jugadores[1];
+            cout << "Empieza jugando " << jugadores[0];
+
 
         break;
         case 2:
@@ -53,9 +54,11 @@ int main()
         break;
 
     }
-    /*int dados [3] = {};
+
+    /*cout<<"----------------------"<<endl;
+    int dados [3] = {};
     int sumaDados;
-    int cantDados = 2;
+    int cantDados = 3;
     for(int i=0; i<cantDados; i++){
         dados[i] = generarDado();
         sumaDados+=dados[i];

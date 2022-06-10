@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1654808808 source:c:\users\ambar trans\documents\personal\utn\2022\1° cuatri\lab i\gran_cerdo\gran_cerdo\main.cpp
+1654819696 source:c:\users\ambar trans\documents\personal\utn\2022\1° cuatri\lab i\gran_cerdo\gran_cerdo\main.cpp
 	<iostream>
 	<clocale>
 	<stdlib.h>
@@ -7,12 +7,13 @@
 	<time.h>
 	"funciones_cerdo.h"
 
-1654808181 source:c:\users\ambar trans\documents\personal\utn\2022\1° cuatri\lab i\gran_cerdo\gran_cerdo\funciones_cerdo.cpp
+1654820367 source:c:\users\ambar trans\documents\personal\utn\2022\1° cuatri\lab i\gran_cerdo\gran_cerdo\funciones_cerdo.cpp
 	<iostream>
 	<clocale>
 	<stdlib.h>
 	<string>
 	<time.h>
+	<conio.h>
 	"funciones_cerdo.h"
 
 1654808372 c:\users\ambar trans\documents\personal\utn\2022\1° cuatri\lab i\gran_cerdo\gran_cerdo\funciones_cerdo.h
