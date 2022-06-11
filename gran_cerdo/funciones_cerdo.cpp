@@ -52,22 +52,15 @@ void cargarMenu () {
 void jugarJuego(){
         const int CANT_JUGADORES=2;
         const int CANT_RONDAS=5;
+        const int DADOS_MAX=3;
         string jugadores[CANT_JUGADORES];
         cargarJugadores(jugadores, CANT_JUGADORES);
         cout << "Empieza jugando " << jugadores[0];
+        int dadosAct = 2;
         for(int i=0; i<CANT_RONDAS; i++){
                 cout<< "Ronda act "<< i+1<< endl;
-            for( int j=0; j<CANT_JUGADORES; j++){
-
-                mostrarJugAct(jugadores[j]);
-
-            }
+            jugarRonda(jugadores, CANT_JUGADORES, DADOS_MAX, i, dadosAct);
         }
-}
-int generarDado(){
-    int num;
-    num = rand() % 6+1;
-    return num;
 }
 
 void mostrarJugAct(string jug[], int a){
@@ -160,10 +153,47 @@ void cargarJugadores(string arr[], int cant){
             }
 }
 
+void jugarRonda(string jugadores[],int cantJugadores, int dadosMax, int ronda, int cantDados) {
+    for( int i=0; i<cantJugadores; i++){
+        int trufasRonda=0;
+        int bandCambioTurno = 0;
+        int vecDados [dadosMax] = {};
+        //while (bandCambioTurno == 0){
+            cout<<"------------------------------------------"<< endl;
+            cout<<"Actualmente esta jugando en la ronda "<< ronda+1<<endl;
+            cout<<"------------------------------------------"<< endl;
+            cout<<jugadores[i]<< " es tu turno. Presiona una tecla para tirar tus dados"<<endl;
+            getch();
+            tirarDados(vecDados, cantDados);
+            for(int i=0; i<cantDados; i++){
+                trufasRonda+=vecDados[i];
+            }
+            cout<<"---------------------------------"<<endl;
+            cout<<"En esta ronda acumulaste "<<trufasRonda<<endl;
+
+        //}
+
+
+    }
+}
+
+void tirarDados(int arr [], int dados){
+    for(int i=0; i<dados; i++){
+        arr[i] = generarDado();
+        cout<< arr[i]<<endl;
+    }
+}
+
 int calcularMax (int a, int b) {
     if (a>b){
         return a;
     }else {
         return b;
     }
+}
+
+int generarDado(){
+    int num;
+    num = rand() % 6+1;
+    return num;
 }
