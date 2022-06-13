@@ -155,26 +155,50 @@ void cargarJugadores(string arr[], int cant){
 
 void jugarRonda(string jugadores[],int cantJugadores, int dadosMax, int ronda, int cantDados) {
     for( int i=0; i<cantJugadores; i++){
+
         int trufasRonda=0;
         int bandCambioTurno = 0;
         int vecDados [dadosMax] = {};
-        //while (bandCambioTurno == 0){
+        while (bandCambioTurno == 0){
+            //system("cls");
             cout<<"------------------------------------------"<< endl;
             cout<<"Actualmente esta jugando en la ronda "<< ronda+1<<endl;
             cout<<"------------------------------------------"<< endl;
             cout<<jugadores[i]<< " es tu turno. Presiona una tecla para tirar tus dados"<<endl;
             getch();
             tirarDados(vecDados, cantDados);
-            for(int i=0; i<cantDados; i++){
-                trufasRonda+=vecDados[i];
+            if(cantDados == 2){
+                if(vecDados[0] != 1 && vecDados[1] !=1){
+                    if(vecDados[0] == vecDados[1]){
+                        trufasRonda+=(acumularTrufas(vecDados, cantDados)*2);
+                        cout<<"Tenes acumuladas "<<trufasRonda<<"Estas obligado a volver a tirar, apreta una tecla"<<endl;
+                        getch();
+                    }else{
+                        int continua;
+                        trufasRonda+=acumularTrufas(vecDados, cantDados);
+                        cout<<"---------------------------------"<<endl;
+                        cout<<"Llevas acumuladas "<<trufasRonda<<endl;
+                        cout<<"Quiere volver a tirar?"<<endl;
+                        cin>>continua;
+                        if(continua==1){
+                            bandCambioTurno = 1;
+                        }
+                    }
+                }
             }
-            cout<<"---------------------------------"<<endl;
-            cout<<"En esta ronda acumulaste "<<trufasRonda<<endl;
-
-        //}
-
-
+            /*for(int i=0; i<cantDados; i++){
+                trufasRonda+=vecDados[i];
+            }*/
+        }
+        cout<<"En esta ronda acumulaste "<<trufasRonda<<endl;
     }
+}
+int acumularTrufas (int arr[],int dados){
+    int acuTrufas = 0;
+    for(int i=0; i<dados; i++){
+        acuTrufas+=arr[i];
+    }
+    return acuTrufas;
 }
 
 void tirarDados(int arr [], int dados){
