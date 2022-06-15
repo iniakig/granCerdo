@@ -53,6 +53,7 @@ void jugarJuego(){
         const int CANT_JUGADORES=2;
         const int CANT_RONDAS=5;
         const int DADOS_MAX=3;
+        int trufasAcumuladas[CANT_JUGADORES][CANT_RONDAS] = {};
         string jugadores[CANT_JUGADORES];
         cargarJugadores(jugadores, CANT_JUGADORES);
         cout << "Empieza jugando " << jugadores[0];
@@ -177,7 +178,7 @@ void jugarRonda(string jugadores[],int cantJugadores, int dadosMax, int ronda, i
                         int continua;
                         trufasRonda+=acumularTrufas(vecDados, cantDados);
                         cout<<"---------------------------------"<<endl;
-                        cout<<"Llevas acumuladas "<<trufasRonda<<endl;
+                        cout<<"Llevas acumuladas "<<trufasRonda<<" trufas" << endl;
                         cout<<"Quiere volver a tirar?"<<endl;
                         cin>>continua;
                         if(continua==1){
@@ -190,7 +191,7 @@ void jugarRonda(string jugadores[],int cantJugadores, int dadosMax, int ronda, i
                 trufasRonda+=vecDados[i];
             }*/
         }
-        cout<<"En esta ronda acumulaste "<<trufasRonda<<endl;
+        cout<<"En esta ronda acumulaste "<<trufasRonda<< " trufas"<<endl;
     }
 }
 int acumularTrufas (int arr[],int dados){
