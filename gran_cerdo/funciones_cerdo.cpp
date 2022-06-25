@@ -53,7 +53,7 @@ void jugarJuego(){
         const int CANT_JUGADORES=2;
         const int CANT_RONDAS=5;
         const int DADOS_MAX=3;
-        int trufasAcumuladas[CANT_JUGADORES][CANT_RONDAS] = {};
+        int trufasAcumuladas[CANT_JUGADORES][CANT_RONDAS+1] = {};
         int oinksAcu [CANT_JUGADORES] = {};
         string jugadores[CANT_JUGADORES];
         cargarJugadores(jugadores, CANT_JUGADORES);
@@ -146,7 +146,7 @@ void cargarJugadores(string arr[], int cant){
 
 }
 
-void jugarRonda(string jugadores[],int acuTrufasGlobal[2][5], int oinks[], int cantJugadores, int dadosMax, int ronda, int &cantDados) {
+void jugarRonda(string jugadores[],int acuTrufasGlobal[2][6], int oinks[], int cantJugadores, int dadosMax, int ronda, int &cantDados) {
     for( int i=0; i<cantJugadores; i++){
         int trufasRonda=0;
         bool bandCambioTurno = true;
@@ -157,17 +157,18 @@ void jugarRonda(string jugadores[],int acuTrufasGlobal[2][5], int oinks[], int c
             cout<<"Actualmente esta jugando en la ronda "<< ronda+1<<endl;
             cout<<"------------------------------------------"<< endl;
             cout<<jugadores[i]<< " es tu turno. Presiona una tecla para tirar tus dados"<<endl;
-            getch();
+            //getch();
             tirarDados(vecDados, cantDados);
             if(cantDados == 2){
                 if(vecDados[0] != 1 && vecDados[1] !=1){
-                    if(vecDados[0] == vecDados[1]){
+                    if(vecDados[0] == vecDados[1]){ // CONDICIONES CUANDO LOS DADOS SON IGUALES PERO NINGUNO ES AS
                         trufasRonda+=(acumularTrufasTiro(vecDados, cantDados)*2);
                         oinks[i]=oinks[i]+1;
                         cout<<"Felicitaciones!!! Hiciste un OINK duplicas las trufas. En este tiro juntaste "<<trufasRonda<<"Estas obligado a volver a tirar, apreta una tecla"<<endl;
                         cout<<"Llevas acumulados "<<oinks[i]<<" OINKS"<<endl;
+                        cout<<"Llevas acumuladas "<<trufasRonda<<" trufas" << endl;
                         getch();
-                    }else{
+                    }else{ // CONDICIONES PARA CUANDO LOS DADOS SON DISTINTOS PERO NINGUNO ES AS
                         char continua;
                         trufasRonda+=acumularTrufasTiro(vecDados, cantDados);
                         cout<<"---------------------------------"<<endl;
@@ -181,15 +182,14 @@ void jugarRonda(string jugadores[],int acuTrufasGlobal[2][5], int oinks[], int c
                             cout<< "En esta ronda sumaste "<<acuTrufasGlobal[i][ronda]<< endl;
                         }
                     }
-                }else if(vecDados[0] == vecDados[1]){
+                }else if(vecDados[0] == vecDados[1]){ // CONDICIONES HUNDIDO EN EL BARRO POR DOS AS
                     cout << "Ups... " <<jugadores[i]<<" te hundiste en el barro, perdes todas las trufas que habias acumulado durante esta ronda y las anteriores. Ademas perdiste el turno, no te olvides 'A quien la codicia gobierna nada le dura'"<<endl;
-                    for(int j=0; j<5; j++){
+                    for(int j=0; j<6; j++){
                         acuTrufasGlobal[i][j]=0;
-                        //cout<< acuTrufasGlobal[i][j];
-                        bandCambioTurno = false;
                     }
+                        bandCambioTurno = false;
                     cantDados = 3;
-                }else{
+                }else{ // CONDICIONES CUANDO SALE UN SOLO AS
                     cout << "Que mala suerte! "<< jugadores[i]<< "Salio un AS, perdiste todas las trufas que venias acumulando en la ronda"<<endl;
                     trufasRonda = 0;
                     bandCambioTurno = false;
@@ -218,7 +218,22 @@ void jugarRonda(string jugadores[],int acuTrufasGlobal[2][5], int oinks[], int c
                         }
                     }
                 }else if(vecDados[0] == vecDados[1] && vecDados[1] == vecDados[2]){
-                        cout<<"UPS... TE HUNDISTE EN EL BARRO RECONTRA HUNDIDO TUS TRUFAS VAN AL OTRO"<<endl;
+                        cout<< "Oh no!!! este cerdito quedo hundido en el barro. El otro cerdito aprovecha la ocasion y le roba todas las trufas que habia acumulado. Estas tan ocupado en intentar salir que no podes hacer nada contra el otro"<<endl;
+                        if(i=0){
+                            acuTrufasGlobal[1][6]+=sumarTrufasGlobal(acuTrufasGlobal,i);
+                            cout<<"TRUFAS ROBADAS"<< acuTrufasGlobal[0][6];
+                            for(int j=0; j<6; j++){
+                                acuTrufasGlobal[i][j]=0;
+                            }
+                                bandCambioTurno = false;
+                        }else{
+                            acuTrufasGlobal[0][6]+=sumarTrufasGlobal(acuTrufasGlobal,i);
+                            cout<<"TRUFAS ROBADAS"<< acuTrufasGlobal[0][6];
+                            for(int j=0; j<6; j++){
+                                acuTrufasGlobal[i][j]=0;
+                            }
+                                bandCambioTurno = false;
+                        }
                 }else{
                     cout << "Que mala suerte! "<< jugadores[i]<< "Salio un AS, perdiste todas las trufas que venias acumulando en la ronda"<<endl;
                     trufasRonda = 0;
@@ -227,6 +242,9 @@ void jugarRonda(string jugadores[],int acuTrufasGlobal[2][5], int oinks[], int c
 
             }
         }
+        cout<<"------------------------------------------------------------------------"<<endl;
+        int trufasTotales = sumarTrufasGlobal(acuTrufasGlobal,i);
+        cout<<jugadores[i]<< " Llevas acumuladas: "<< trufasTotales<< "en todo el juego."<<endl;
     }
 }
 
@@ -236,6 +254,15 @@ int acumularTrufasTiro (int arr[],int dados){
         acuTrufas+=arr[i];
     }
     return acuTrufas;
+}
+
+int sumarTrufasGlobal (int mat[2][6], int numJug) {
+    int trufasAcumuladas = 0;
+    for(int i = 0; i<6; i++){
+        trufasAcumuladas+= mat[numJug][i];
+    }
+    return trufasAcumuladas;
+
 }
 
 void tirarDados(int arr [], int dados){
@@ -255,6 +282,7 @@ int calcularMax (int a, int b) {
 
 int generarDado(){
     int num;
-    num = rand() % 6+1;
+    cin>>num;
+    //num = rand() % 6+1;
     return num;
 }
