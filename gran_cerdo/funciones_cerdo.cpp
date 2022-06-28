@@ -54,20 +54,17 @@ void jugarJuego(){
         const int CANT_RONDAS=5;
         const int DADOS_MAX=3;
         int trufasAcumuladas[CANT_JUGADORES][CANT_RONDAS+1] = {};
-        int oinksAcu [CANT_JUGADORES] = {};
+        int vecOinks [CANT_JUGADORES] = {};
+        int vecMaxTiros [CANT_JUGADORES] = {};
         string jugadores[CANT_JUGADORES];
         cargarJugadores(jugadores, CANT_JUGADORES);
         cout << "Empieza jugando " << jugadores[0];
         int dadosAct = 2;
         for(int i=0; i<CANT_RONDAS; i++){
             cout<< "Ronda act "<< i+1<< endl;
-            jugarRonda(jugadores,trufasAcumuladas,oinksAcu,CANT_JUGADORES, DADOS_MAX, i, dadosAct);
+            jugarRonda(jugadores,trufasAcumuladas,vecOinks,vecMaxTiros,CANT_JUGADORES, DADOS_MAX, i, dadosAct);
 
         }
-}
-
-void mostrarJugAct(string jug[], int a){
-    cout << "Jugador act "<< jug[a] <<endl;
 }
 
 void cargarJugadores(string arr[], int cant){
@@ -146,19 +143,21 @@ void cargarJugadores(string arr[], int cant){
 
 }
 
-void jugarRonda(string jugadores[],int acuTrufasGlobal[2][6], int oinks[], int cantJugadores, int dadosMax, int ronda, int &cantDados) {
+void jugarRonda(string jugadores[],int acuTrufasGlobal[2][6], int oinks[], int vecContTiros [], int cantJugadores, int dadosMax, int ronda, int &cantDados) {
     for( int i=0; i<cantJugadores; i++){
         int trufasRonda=0;
         bool bandCambioTurno = true;
         int vecDados [dadosMax] = {};
+        int contadorTiros = 0;
         while (bandCambioTurno){
             //system("cls");
             cout<<"------------------------------------------"<< endl;
             cout<<"Actualmente esta jugando en la ronda "<< ronda+1<<endl;
             cout<<"------------------------------------------"<< endl;
             cout<<jugadores[i]<< " es tu turno. Presiona una tecla para tirar tus dados"<<endl;
-            //getch();
+            getch();
             tirarDados(vecDados, cantDados);
+            contadorTiros ++;
             if(cantDados == 2){
                 if(vecDados[0] != 1 && vecDados[1] !=1){
                     if(vecDados[0] == vecDados[1]){ // CONDICIONES CUANDO LOS DADOS SON IGUALES PERO NINGUNO ES AS
@@ -167,6 +166,7 @@ void jugarRonda(string jugadores[],int acuTrufasGlobal[2][6], int oinks[], int c
                         cout<<"Felicitaciones!!! Hiciste un OINK duplicas las trufas. En este tiro juntaste "<<trufasRonda<<"Estas obligado a volver a tirar, apreta una tecla"<<endl;
                         cout<<"Llevas acumulados "<<oinks[i]<<" OINKS"<<endl;
                         cout<<"Llevas acumuladas "<<trufasRonda<<" trufas" << endl;
+
                         getch();
                     }else{ // CONDICIONES PARA CUANDO LOS DADOS SON DISTINTOS PERO NINGUNO ES AS
                         char continua;
@@ -245,6 +245,10 @@ void jugarRonda(string jugadores[],int acuTrufasGlobal[2][6], int oinks[], int c
         cout<<"------------------------------------------------------------------------"<<endl;
         int trufasTotales = sumarTrufasGlobal(acuTrufasGlobal,i);
         cout<<jugadores[i]<< " Llevas acumuladas: "<< trufasTotales<< "en todo el juego."<<endl;
+        if(contadorTiros > vecContTiros[i]){
+            vecContTiros[i]=contadorTiros;
+            cout<< "Superaste tu ronda con mayor cantidad de tiros. Lanzaste "<< vecContTiros[i]<< "tiros."<<endl;
+        }
     }
 }
 
@@ -282,7 +286,7 @@ int calcularMax (int a, int b) {
 
 int generarDado(){
     int num;
-    cin>>num;
-    //num = rand() % 6+1;
+    //cin>>num;
+    num = rand() % 6+1;
     return num;
 }
