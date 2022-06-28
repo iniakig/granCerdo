@@ -5,6 +5,8 @@ void cargarMenu();
 void cargarJugadores(string arr[], int cant); // FUNCION PARA CARGAR LOS NOMBRES DE LOS JUGADORES Y DEFINIR QUIEN DEBE COMENZAR TIRANDO -- SE PASA EL VECTOR DONDE SE GUARDAN LOS NOMBRES DE LOS JUGADORES X PARAMETRO.
 void jugarJuego();
 void jugarRonda(string jugadores[],int acuTrufasGlobal[2][6], int oinks[], int vecContTiros [], int cantJugadores, int dadosMax, int ronda, int &cantDados);
+void dibujarCuadroRonda (int ronda, int trufas, int tiros);
+bool checkContinua(); // FUNCION QUE PREGUNTA SI QUIERE CONTINUAR TIRANDO. RETORNA UN BOOL
 int acumularTrufasTiro (int arr[],int dados); // FUNCION UTILIZADA PARA SUMAR LAS TRUFAS DEL TIRO AL ACUMULADOR DE LA RONDA ACTUAL. NO CARGA EN EL ACUMULADOR GLOBAL
 int sumarTrufasGlobal (int mat[2][6], int numJug);
 void tirarDados(int arr [], int dados); // AL LLAMAR A LA FUNCION SE CARGA EN UN VECTOR DE 3 POSICIONES NUMEROS DEL 1 al 6. A Traves del parametro DADOS se pasa la variable dadosAct(Establece si se juega con 2 o 3 dados).

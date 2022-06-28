@@ -150,12 +150,14 @@ void jugarRonda(string jugadores[],int acuTrufasGlobal[2][6], int oinks[], int v
         int vecDados [dadosMax] = {};
         int contadorTiros = 0;
         while (bandCambioTurno){
-            //system("cls");
-            cout<<"------------------------------------------"<< endl;
-            cout<<"Actualmente esta jugando en la ronda "<< ronda+1<<endl;
-            cout<<"------------------------------------------"<< endl;
-            cout<<jugadores[i]<< " es tu turno. Presiona una tecla para tirar tus dados"<<endl;
-            getch();
+            cout<<"GRAN CERDO"<<endl;
+            cout<<"--------------------------------------------------------------------------------------------------------------"<<endl;
+            cout<<jugadores[0]<<":"<<sumarTrufasGlobal(acuTrufasGlobal,0)<< "trufas acumuladas.         "<<jugadores[1]<<":"<<sumarTrufasGlobal(acuTrufasGlobal,1)<< "trufas acumuladas.         "<<endl;
+            cout<<endl;
+            cout<<endl;
+            cout<<"TURNO DE "<<jugadores[i]<<endl;
+            dibujarCuadroRonda(ronda,trufasRonda,contadorTiros);
+            cout<< "LANZAMIENTO #"<<contadorTiros+1<<endl;
             tirarDados(vecDados, cantDados);
             contadorTiros ++;
             if(cantDados == 2){
@@ -163,23 +165,15 @@ void jugarRonda(string jugadores[],int acuTrufasGlobal[2][6], int oinks[], int v
                     if(vecDados[0] == vecDados[1]){ // CONDICIONES CUANDO LOS DADOS SON IGUALES PERO NINGUNO ES AS
                         trufasRonda+=(acumularTrufasTiro(vecDados, cantDados)*2);
                         oinks[i]=oinks[i]+1;
-                        cout<<"Felicitaciones!!! Hiciste un OINK duplicas las trufas. En este tiro juntaste "<<trufasRonda<<"Estas obligado a volver a tirar, apreta una tecla"<<endl;
+                        cout<<"Felicitaciones!!! Hiciste un OINK duplicas las trufas de este lanzamiento. Estas obligado a volver a tirar, apreta una tecla"<<endl;
                         cout<<"Llevas acumulados "<<oinks[i]<<" OINKS"<<endl;
-                        cout<<"Llevas acumuladas "<<trufasRonda<<" trufas" << endl;
-
+                        //cout<<"Llevas acumuladas "<<trufasRonda<<" trufas" << endl;
                         getch();
                     }else{ // CONDICIONES PARA CUANDO LOS DADOS SON DISTINTOS PERO NINGUNO ES AS
-                        char continua;
                         trufasRonda+=acumularTrufasTiro(vecDados, cantDados);
-                        cout<<"---------------------------------"<<endl;
-                        cout<<"Llevas acumuladas "<<trufasRonda<<" trufas" << endl;
-                        cout<<"Quiere volver a tirar? -- S/N"<<endl;
-                        cin>>continua;
-                        if(continua=='N'||continua=='n'){
-                            bandCambioTurno = false;
+                        bandCambioTurno = checkContinua();
+                        if(!bandCambioTurno){
                             acuTrufasGlobal[i][ronda] = trufasRonda;
-                            cout<< "------------------------------------------------"<<endl;
-                            cout<< "En esta ronda sumaste "<<acuTrufasGlobal[i][ronda]<< endl;
                         }
                     }
                 }else if(vecDados[0] == vecDados[1]){ // CONDICIONES HUNDIDO EN EL BARRO POR DOS AS
@@ -187,7 +181,7 @@ void jugarRonda(string jugadores[],int acuTrufasGlobal[2][6], int oinks[], int v
                     for(int j=0; j<6; j++){
                         acuTrufasGlobal[i][j]=0;
                     }
-                        bandCambioTurno = false;
+                    bandCambioTurno = false;
                     cantDados = 3;
                 }else{ // CONDICIONES CUANDO SALE UN SOLO AS
                     cout << "Que mala suerte! "<< jugadores[i]<< "Salio un AS, perdiste todas las trufas que venias acumulando en la ronda"<<endl;
@@ -195,46 +189,39 @@ void jugarRonda(string jugadores[],int acuTrufasGlobal[2][6], int oinks[], int v
                     bandCambioTurno = false;
                 }
             }
-            if(cantDados > 2){
+            if(cantDados > 2){ // CONDICIONES QUE APLICAN CUANDO SE EMPIEZA A JUGAR CON MAS DE 2 DADOS
                 if(vecDados[0] != 1 && vecDados[1] !=1 && vecDados[2] !=1){
-                    if(vecDados[0] == vecDados[1] && vecDados[1] == vecDados[2]){
+                    if(vecDados[0] == vecDados[1] && vecDados[1] == vecDados[2]){ // TRES DADOS IGUALES -- OINK!!
                         trufasRonda+=(acumularTrufasTiro(vecDados, cantDados)*2);
                         oinks[i]=oinks[i]+1;
-                        cout<<"Felicitaciones!!! Hiciste un OINK duplicas las trufas. En este tiro juntaste "<<trufasRonda<<"Estas obligado a volver a tirar, apreta una tecla"<<endl;
+                        cout<<"Felicitaciones!!! Hiciste un OINK duplicas las trufas de este lanzamiento. Estas obligado a volver a tirar, apreta una tecla"<<endl;
                         cout<<"Llevas acumulados "<<oinks[i]<<" OINKS"<<endl;
                         getch();
-                    }else{
-                        char continua;
+                    }else{ // DADOS DIFERENTES SIN AS
                         trufasRonda+=acumularTrufasTiro(vecDados, cantDados);
-                        cout<<"---------------------------------"<<endl;
-                        cout<<"Llevas acumuladas "<<trufasRonda<<" trufas" << endl;
-                        cout<<"Quiere volver a tirar? -- S/N"<<endl;
-                        cin>>continua;
-                        if(continua=='N'||continua=='n'){
-                            bandCambioTurno = false;
+                        bandCambioTurno = checkContinua();
+                        if(!bandCambioTurno){
                             acuTrufasGlobal[i][ronda] = trufasRonda;
-                            cout<< "------------------------------------------------"<<endl;
-                            cout<< "En esta ronda sumaste "<<acuTrufasGlobal[i][ronda]<< endl;
                         }
                     }
-                }else if(vecDados[0] == vecDados[1] && vecDados[1] == vecDados[2]){
+                }else if(vecDados[0] == vecDados[1] && vecDados[1] == vecDados[2]){ // TRES ASES
                         cout<< "Oh no!!! este cerdito quedo hundido en el barro. El otro cerdito aprovecha la ocasion y le roba todas las trufas que habia acumulado. Estas tan ocupado en intentar salir que no podes hacer nada contra el otro"<<endl;
-                        if(i=0){
+                        if(i==0){
                             acuTrufasGlobal[1][6]+=sumarTrufasGlobal(acuTrufasGlobal,i);
-                            cout<<"TRUFAS ROBADAS"<< acuTrufasGlobal[0][6];
+                            cout<<"Te robaron "<< sumarTrufasGlobal(acuTrufasGlobal,i)<<" trufas."<<endl;
                             for(int j=0; j<6; j++){
                                 acuTrufasGlobal[i][j]=0;
                             }
                                 bandCambioTurno = false;
                         }else{
                             acuTrufasGlobal[0][6]+=sumarTrufasGlobal(acuTrufasGlobal,i);
-                            cout<<"TRUFAS ROBADAS"<< acuTrufasGlobal[0][6];
+                            cout<<"Te robaron "<< sumarTrufasGlobal(acuTrufasGlobal,i)<<" trufas."<<endl;
                             for(int j=0; j<6; j++){
                                 acuTrufasGlobal[i][j]=0;
                             }
                                 bandCambioTurno = false;
                         }
-                }else{
+                }else{ // CUALQUIER NUMERO ACOMPANADO DE UNO O DOS ASES
                     cout << "Que mala suerte! "<< jugadores[i]<< "Salio un AS, perdiste todas las trufas que venias acumulando en la ronda"<<endl;
                     trufasRonda = 0;
                     bandCambioTurno = false;
@@ -243,12 +230,39 @@ void jugarRonda(string jugadores[],int acuTrufasGlobal[2][6], int oinks[], int v
             }
         }
         cout<<"------------------------------------------------------------------------"<<endl;
-        int trufasTotales = sumarTrufasGlobal(acuTrufasGlobal,i);
-        cout<<jugadores[i]<< " Llevas acumuladas: "<< trufasTotales<< "en todo el juego."<<endl;
         if(contadorTiros > vecContTiros[i]){
             vecContTiros[i]=contadorTiros;
-            cout<< "Superaste tu ronda con mayor cantidad de tiros. Lanzaste "<< vecContTiros[i]<< "tiros."<<endl;
+            cout<< "Superaste tu ronda con mayor cantidad de tiros. Lanzaste "<< vecContTiros[i]<< " tiros."<<endl;
         }
+        if(sumarTrufasGlobal(acuTrufasGlobal,0)>50 && sumarTrufasGlobal(acuTrufasGlobal,1)>50){
+            cantDados = 3;
+        }
+        cout << "Turno del siguiente jugador, presiona una tecla"<<endl;
+        getch();
+        system("cls");
+    }
+}
+
+void dibujarCuadroRonda (int ronda, int trufas, int tiros){
+
+    cout<< "+------------------------------+"<<endl;
+    cout<< "| RONDA: "<<ronda+1<<"                     |"<<endl;
+    cout<< "| TRUFAS DE LA RONDA: "<<trufas<<"       |"<<endl;
+    cout<< "| LANZAMIENTOS: "<<tiros<<"             |"<<endl;
+    cout<< "+------------------------------+"<<endl;
+}
+bool checkContinua(){
+    char ingreso;
+    cout<<"Quiere volver a tirar? -- S/N"<<endl;
+    cin>>ingreso;
+    while (!(ingreso== 'N' || ingreso=='n' || ingreso=='s' || ingreso=='S')){
+        cout<< "El ingreso no es valido, por favor vuelva a ingresar su opcion. Quiere volver a tirar? -- S/N"<<endl;
+        cin>>ingreso;
+    }
+    if(ingreso=='N'||ingreso=='n'){
+        return false;
+    }else {
+        return true;
     }
 }
 
