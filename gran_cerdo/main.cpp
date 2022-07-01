@@ -12,19 +12,13 @@ int main()
 {
     setlocale(LC_ALL, "Spanish");
     srand (time(NULL));
-
-    cargarMenu();
+    int pdvTotal[2]={};
+    string jugadores[2];
+    bool continuar = true;
+    while(continuar){
+    cargarMenu(jugadores, pdvTotal);
+    system("cls");
+    }
 
 }
-
-    /*cout<<"----------------------"<<endl;
-    int dados [3] = {};
-    int sumaDados;
-    int cantDados = 3;
-    for(int i=0; i<cantDados; i++){
-        dados[i] = generarDado();
-        sumaDados+=dados[i];
-        cout<<dados[i]<< endl;
-    }*/
-
 
