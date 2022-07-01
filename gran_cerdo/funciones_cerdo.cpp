@@ -9,7 +9,7 @@ using namespace std;
 
 #include "funciones_cerdo.h"
 
-void cargarMenu () {
+void cargarMenu (string jugadores[], int pdvMax[]) {
     cout << "GRAN CERDO" << endl;
     cout << "--------------------" << endl;
     cout << "1 - JUGAR" << endl;
@@ -21,14 +21,6 @@ void cargarMenu () {
 
         /*DECLARACION DE VARIABLES */
     int opcMenuPrin;
-    int matPDV[2][4]={};
-    const int CANT_JUGADORES=2;
-    const int CANT_RONDAS=5;
-    const int DADOS_MAX=3;
-    int trufasAcumuladas[CANT_JUGADORES][CANT_RONDAS+1] = {};
-    int vecOinks [CANT_JUGADORES] = {};
-    int vecMaxTiros [CANT_JUGADORES] = {};
-    string jugadores[CANT_JUGADORES];
     cout << "Ingrese una opción: ";
     cin >> opcMenuPrin;
 
@@ -39,35 +31,53 @@ void cargarMenu () {
     }
     switch(opcMenuPrin){
         case 1:
-            jugarJuego(matPDV,CANT_JUGADORES, CANT_RONDAS, DADOS_MAX, trufasAcumuladas, vecOinks, vecMaxTiros, jugadores);
+            jugarJuego(jugadores, pdvMax);
 
 
         break;
         case 2:
-            dibujarCuadroEstadisticas(pdv, trufasAcumuladas, vecOinks, vecMaxTiros, jugadores);
+            imprimirEstadisticas(jugadores, pdvMax);
         break;
         case 3:
-            cout << "Eligio 3";
+            imprimirCreditos();
         break;
         case 0:
-            exit(0);
+            char ingreso;
+            cout<<"Quiere salir del programa? -- S/N"<<endl;
+            cin>>ingreso;
+            while (!(ingreso== 'N' || ingreso=='n' || ingreso=='s' || ingreso=='S')){
+                cout<< "El ingreso no es valido, por favor vuelva a ingresar su opcion. Quiere salir del programa? -- S/N"<<endl;
+                cin>>ingreso;
+            }
+            if(ingreso=='S'||ingreso=='s'){
+                exit(0);
+            }
         break;
 
     }
 }
 
-void jugarJuego(int pdv[2][4], int cantJug, int cantRondas, int dadosMax, int trufasAcumuladas[2][6], int vecOinks[], int vecMaxTiros[], string jugadores[]){
-        cargarJugadores(jugadores, cantJug);
+void jugarJuego(string jugadores[], int arrPDVTotal[]){
+        const int CANT_JUGADORES=2;
+        const int CANT_RONDAS=5;
+        const int DADOS_MAX=3;
+        arrPDVTotal[0] = 0;
+        arrPDVTotal[1] = 0;
+        int trufasAcumuladas[CANT_JUGADORES][CANT_RONDAS+1] = {};
+        int vecOinks [CANT_JUGADORES] = {};
+        int vecMaxTiros [CANT_JUGADORES] = {};
+        int matPDV[2][4]={};
+        cargarJugadores(jugadores, CANT_JUGADORES);
         cout << "Empieza jugando " << jugadores[0]<<" presiona una tecla para comenzar"<<endl;
         getch();
         system("cls");
         int dadosAct = 2;
-        for(int i=0; i<cantRondas; i++){
-            jugarRonda(jugadores,trufasAcumuladas,vecOinks,vecMaxTiros,cantJug, dadosMax, i, dadosAct);
+        for(int i=0; i<CANT_RONDAS; i++){
+            jugarRonda(jugadores,trufasAcumuladas,vecOinks,vecMaxTiros,CANT_JUGADORES, DADOS_MAX, i, dadosAct);
 
         }
-        cargarPDV(pdv, trufasAcumuladas, vecOinks, vecMaxTiros);
-        dibujarCuadroEstadisticas(pdv, trufasAcumuladas, vecOinks, vecMaxTiros, jugadores);
+        cargarPDV(matPDV, trufasAcumuladas, vecOinks, vecMaxTiros, arrPDVTotal);
+        dibujarCuadroPDV(matPDV, trufasAcumuladas, vecOinks, vecMaxTiros, jugadores, arrPDVTotal);
 }
 
 void cargarJugadores(string arr[], int cant){
@@ -75,8 +85,8 @@ void cargarJugadores(string arr[], int cant){
             int matDados [cant][2];
             int bandEmpate = 0;
             for(int i=0; i<cant; i++){
-                cout << "Ingrese el nombre del jugador " << i+1 << " " << endl;
                 cin.ignore();
+                cout << "Ingrese el nombre del jugador " << i+1<<": ";
                 //cin >> nombresJugadores[i];
                 getline(cin, nombresJugadores[i]);
                 //cin.ignore();
@@ -253,7 +263,7 @@ void jugarRonda(string jugadores[],int acuTrufasGlobal[2][6], int oinks[], int v
     }
 }
 
-void cargarPDV (int pdv[2][4], int trufas [2][6],int oinks[], int tiros[]){
+void cargarPDV (int pdv[2][4], int trufas [2][6],int oinks[], int tiros[], int arrPDVTotal[]){
     int pdvmaxTrufas = 5;
     int pdvOinks = 2;
     int pdvMaxTiros = 3;
@@ -278,6 +288,7 @@ void cargarPDV (int pdv[2][4], int trufas [2][6],int oinks[], int tiros[]){
     pdv[0][2]=oinks[0]*pdvOinks;
     pdv[1][2]=oinks[1]*pdvOinks;
 
+    // ASIGNAR 3 PDV AL QUE HAYA HECHO MAS LANZAMIENTOS EN UNA RONDA
     if(tiros[0]>tiros[1]){
         pdv[0][3]=pdvMaxTiros;
     }else if(tiros[0]<tiros[1]){
@@ -285,6 +296,13 @@ void cargarPDV (int pdv[2][4], int trufas [2][6],int oinks[], int tiros[]){
     }else if(tiros[0]==tiros[1]){
         pdv[0][3]=pdvMaxTiros;
         pdv[1][3]=pdvMaxTiros;
+    }
+
+    // CARGA LOS PUNTOS DE VICTORIA TOTALES EN UN ARRAY DE LA FUNCION MAIN PARA LUEGO USARLOS EN LA ESTADISTICA
+    for(int i=0; i<2; i++){
+        for(int j=0; j<4; j++){
+            arrPDVTotal[i]= arrPDVTotal[i]+pdv[i][j];
+        }
     }
 }
 
@@ -312,9 +330,11 @@ void dibujarCuadroRonda (int ronda, int trufas, int tiros){
 
 }
 
-void dibujarCuadroEstadisticas (int pdv[2][4], int trufas[2][6], int oinks[], int tiros[], string jugadores[]){
+void dibujarCuadroPDV (int pdv[2][4], int trufas[2][6], int oinks[], int tiros[], string jugadores[], int arrPDVTotal[]){
     int trufasJug1=sumarTrufasGlobal(trufas,0);
     int trufasJug2=sumarTrufasGlobal(trufas,1);
+
+    string oink;
     cout<<"GRAN CERDO"<<endl;
     cout<<"--------------------------------------------------------------------------------------------------------------"<<endl;
     cout<<endl;
@@ -325,7 +345,58 @@ void dibujarCuadroEstadisticas (int pdv[2][4], int trufas[2][6], int oinks[], in
     cout<<"Cada 50 trufas                       "<<pdv[0][1]<<" PDV ("<<50*pdv[0][1]<<" trufas)          "<<pdv[1][1]<<" PDV ("<<50*pdv[1][1]<<" trufas)"<<endl;
     cout<<"Oinks                                "<<pdv[0][2]<<" PDV ("<<oinks[0]<<" Oinks)           "<<pdv[1][2]<<" PDV ("<<oinks[1]<<" Oinks)"<<endl;
     cout<<"Cerdo codicioso                      "<<pdv[0][3]<<" PDV ("<<tiros[0]<<" lanzamientos)    "<<pdv[1][3]<<" PDV ("<<tiros[1]<<" lanzamientos)"<<endl;
+    cout<<"--------------------------------------------------------------------------------------------------------------"<<endl;
+    cout<<"TOTAL                                "<<arrPDVTotal[0]<<" PDV                   "<<arrPDVTotal[1]<<" PDV"<<endl;
+    cout<<endl;
+
+    // LEYENDA GANADOR
+    if(arrPDVTotal[0]>arrPDVTotal[1]){
+        cout<< "GANADOR: "<< jugadores[0]<<" con "<<arrPDVTotal[0]<< " puntos de victoria."<<endl;
+    }else if(arrPDVTotal[0]<arrPDVTotal[1]){
+        cout<< "GANADOR: "<< jugadores[1]<<" con "<<arrPDVTotal[1]<< " puntos de victoria."<<endl;
+    }else if(arrPDVTotal[0]==arrPDVTotal[1]){
+        cout<< "Empataron los dos con "<< arrPDVTotal[0]<<" puntos de victoria."<<endl;
+    }
+    cout<<endl;
+    cout<<"Ingrese Oink para continuar: ";
+    cin>>oink;
+    while(!(oink == "oink" || oink == "OINK")){
+        cout<<"Ingresaste otra palabra, por favor escribi OINK para continuar: ";
+        cin>>oink;
+    }
 }
+
+void imprimirEstadisticas(string jugador[], int pdv[]){
+
+    if(pdv[0]== 0 && pdv[1]==0){
+        cout<<"Aun no se jugo ninguna partida, no hay estadisticas para mostrar"<<endl;
+    }else if(pdv[0]>pdv[1]){
+        cout<< "El jugador que tiene la mayor cantidad de PDV es: "<< jugador[0]<<" con "<<pdv[0]<<endl;
+    }else if(pdv[0]<pdv[1]){
+        cout<< "El jugador que tiene la mayor cantidad de PDV es: "<< jugador[1]<<" con "<<pdv[1]<<endl;
+    }else if(pdv[0]==pdv[1]){
+        cout<<jugador[0]<< " y "<<jugador[1]<<" empataron con "<< pdv[0]<<" puntos de victoria."<<endl;
+    }
+    cout<<endl;
+    cout <<"Presiona cualquier tecla para volver al menú" << endl;
+    getch();
+    system("cls");
+
+}
+
+void imprimirCreditos(){
+    cout <<"PIGGY OINK"<< endl;
+    cout << "_-_-_-_-_-_" << endl;
+    cout <<"Legajo 26340, Arroyo, Ailen Marina"<< endl;
+    cout <<"Legajo 25801, Avila, Rosario"<< endl;
+    cout <<"Legajo 26861, Galdos Surmani, Iñaki"<< endl;
+    cout <<"Legajo 26175, Velazquez, Kevin Alejandro"<< endl;
+    cout<<endl;
+    cout <<"Presiona cualquier tecla para volver al menú" << endl;
+    getch();
+    system("cls");
+}
+
 bool checkContinua(){
     char ingreso;
     cout<<"Quiere volver a tirar? -- S/N"<<endl;
