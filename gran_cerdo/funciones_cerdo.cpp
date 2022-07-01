@@ -22,6 +22,13 @@ void cargarMenu () {
         /*DECLARACION DE VARIABLES */
     int opcMenuPrin;
     int matPDV[2][4]={};
+    const int CANT_JUGADORES=2;
+    const int CANT_RONDAS=5;
+    const int DADOS_MAX=3;
+    int trufasAcumuladas[CANT_JUGADORES][CANT_RONDAS+1] = {};
+    int vecOinks [CANT_JUGADORES] = {};
+    int vecMaxTiros [CANT_JUGADORES] = {};
+    string jugadores[CANT_JUGADORES];
     cout << "Ingrese una opción: ";
     cin >> opcMenuPrin;
 
@@ -32,12 +39,12 @@ void cargarMenu () {
     }
     switch(opcMenuPrin){
         case 1:
-            jugarJuego(matPDV);
+            jugarJuego(matPDV,CANT_JUGADORES, CANT_RONDAS, DADOS_MAX, trufasAcumuladas, vecOinks, vecMaxTiros, jugadores);
 
 
         break;
         case 2:
-            cout << "Eligio 2";
+            dibujarCuadroEstadisticas(pdv, trufasAcumuladas, vecOinks, vecMaxTiros, jugadores);
         break;
         case 3:
             cout << "Eligio 3";
@@ -49,30 +56,18 @@ void cargarMenu () {
     }
 }
 
-void jugarJuego(int pdv[2][4]){
-        const int CANT_JUGADORES=2;
-        const int CANT_RONDAS=5;
-        const int DADOS_MAX=3;
-        int trufasAcumuladas[CANT_JUGADORES][CANT_RONDAS+1] = {};
-        int vecOinks [CANT_JUGADORES] = {};
-        int vecMaxTiros [CANT_JUGADORES] = {};
-        string jugadores[CANT_JUGADORES];
-        cargarJugadores(jugadores, CANT_JUGADORES);
+void jugarJuego(int pdv[2][4], int cantJug, int cantRondas, int dadosMax, int trufasAcumuladas[2][6], int vecOinks[], int vecMaxTiros[], string jugadores[]){
+        cargarJugadores(jugadores, cantJug);
         cout << "Empieza jugando " << jugadores[0]<<" presiona una tecla para comenzar"<<endl;
         getch();
         system("cls");
         int dadosAct = 2;
-        for(int i=0; i<CANT_RONDAS; i++){
-            jugarRonda(jugadores,trufasAcumuladas,vecOinks,vecMaxTiros,CANT_JUGADORES, DADOS_MAX, i, dadosAct);
+        for(int i=0; i<cantRondas; i++){
+            jugarRonda(jugadores,trufasAcumuladas,vecOinks,vecMaxTiros,cantJug, dadosMax, i, dadosAct);
 
         }
         cargarPDV(pdv, trufasAcumuladas, vecOinks, vecMaxTiros);
-        for(int i = 0; i<2;i++){
-            for(int j=0; j<4; j++){
-                cout<<pdv[i][j]<<endl;
-            }
-        }
-
+        dibujarCuadroEstadisticas(pdv, trufasAcumuladas, vecOinks, vecMaxTiros, jugadores);
 }
 
 void cargarJugadores(string arr[], int cant){
@@ -317,6 +312,20 @@ void dibujarCuadroRonda (int ronda, int trufas, int tiros){
 
 }
 
+void dibujarCuadroEstadisticas (int pdv[2][4], int trufas[2][6], int oinks[], int tiros[], string jugadores[]){
+    int trufasJug1=sumarTrufasGlobal(trufas,0);
+    int trufasJug2=sumarTrufasGlobal(trufas,1);
+    cout<<"GRAN CERDO"<<endl;
+    cout<<"--------------------------------------------------------------------------------------------------------------"<<endl;
+    cout<<endl;
+    cout<<endl;
+    cout<<"HITO                                 "<<jugadores[0]<<"                    "<<jugadores[1]<<endl;
+    cout<<"--------------------------------------------------------------------------------------------------------------"<<endl;
+    cout<<"Más trufas en total                  "<<pdv[0][0]<<" PDV ("<<trufasJug1<<" trufas)         "<<pdv[1][0]<<" PDV ("<<trufasJug2<<" trufas)"<<endl;
+    cout<<"Cada 50 trufas                       "<<pdv[0][1]<<" PDV ("<<50*pdv[0][1]<<" trufas)          "<<pdv[1][1]<<" PDV ("<<50*pdv[1][1]<<" trufas)"<<endl;
+    cout<<"Oinks                                "<<pdv[0][2]<<" PDV ("<<oinks[0]<<" Oinks)           "<<pdv[1][2]<<" PDV ("<<oinks[1]<<" Oinks)"<<endl;
+    cout<<"Cerdo codicioso                      "<<pdv[0][3]<<" PDV ("<<tiros[0]<<" lanzamientos)    "<<pdv[1][3]<<" PDV ("<<tiros[1]<<" lanzamientos)"<<endl;
+}
 bool checkContinua(){
     char ingreso;
     cout<<"Quiere volver a tirar? -- S/N"<<endl;
